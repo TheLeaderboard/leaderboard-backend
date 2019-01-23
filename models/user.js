@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//create schema
+// create schema
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -20,5 +20,11 @@ const UserSchema = new Schema({
     default: Date.now
   }
 });
+
+UserSchema.virtual("managed_leagues", {
+  ref: "League",
+  localField: "_id",
+  foreignField: "commissioner"
+})
 
 module.exports = User = mongoose.model("users", UserSchema);
