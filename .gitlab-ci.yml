@@ -1,0 +1,48 @@
+image: node:8.11.3
+
+stages:
+  - ver
+  - init
+  - tests
+  - deploy
+
+ver:
+  stage: ver
+  script:
+    - node --version
+    - whoami
+
+init:
+  stage: init
+  script:
+    - npm cache verify
+    - rm -rf node-modules
+    - npm install
+
+run_tests:
+  stage: tests
+  script:
+    - echo "run tests"
+
+deploy_staging:
+  stage: deploy
+  script:
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/the-leaderboard-staging.git
+    - git push heroku master
+  environment:
+    name: staging
+    url: https://the-leaderboard-staging.herokuapp.com/
+  only:
+    - master
+
+deploy_production:
+  stage: deploy
+  script:
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/the-leaderboard.git
+    - git push heroku master
+  environment:
+    name: production
+    url: https://the-leaderboard.herokuapp.com/
+  only:
+    - master
+  when: manual
