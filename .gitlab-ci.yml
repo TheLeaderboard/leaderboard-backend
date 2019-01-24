@@ -16,7 +16,7 @@ init:
   stage: init
   script:
     - npm cache verify
-    - npm -rf node-modules
+    - rm -rf node-modules
     - npm install
 
 run_tests:
