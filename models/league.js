@@ -14,7 +14,11 @@ const LeagueSchema = new Schema({
   commissioner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
-  }
+  },
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }]
 });
 
 module.exports = League = mongoose.model("leagues", LeagueSchema);
