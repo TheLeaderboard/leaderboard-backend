@@ -7,6 +7,10 @@ const LeagueSchema = new Schema({
     type: String,
     required: true
   },
+  game_type: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "GameDefinition"
+  },
   created_date: {
     type: Date,
     default: Date.now

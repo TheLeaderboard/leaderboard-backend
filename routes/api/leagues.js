@@ -11,12 +11,12 @@ router.post("/create", (req, res) => {
   const userId = req.decoded.id;
   const newLeague = new League({
     name: req.body.name,
+    game_type: req.body.gameType,
     commissioner: userId
   });
   newLeague.members.push(userId);
   newLeague.save()
     .then(league => {
-      console.log(league);
       res.json({
         success: true,
         league: league
