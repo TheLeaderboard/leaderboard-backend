@@ -29,6 +29,7 @@ router.post("/create", (req, res) => {
 // @desc Get a league
 // @access Public
 router.get("/:id", (req, res) => {
+  // update to only return leagues where the user is a member
   var id = req.params.id;
   League.findById(id)
     .then(league => {
@@ -42,6 +43,27 @@ router.get("/:id", (req, res) => {
       res.json({
         success: false,
         message: "Couldn't find league with that ID"
+      });
+    });
+});
+
+// @route GET /api/leagues/
+// @desc Load all leagues for a user
+// @access Public
+router.get("/", (req, res) => {
+  const userId = req.decoded.id;
+  League.find({ members: userId })
+    .then(leagues => {
+      res.json({
+        success: true,
+        myLeagues: leagues
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.json({
+        success: false,
+        message: "Couldn't find any leagues"
       });
     });
 });
