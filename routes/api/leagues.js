@@ -28,11 +28,10 @@ router.post("/create", (req, res) => {
 // @route GET /api/leagues/get/:id
 // @desc Get a league
 // @access Public
-router.get("/get/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   var id = req.params.id;
   League.findById(id)
     .then(league => {
-      console.log(league);
       res.json({
         success: true,
         league: league
