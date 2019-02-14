@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+// load invitations module
+const invitations = require("../../modules/invitations");
+const users = require("../../modules/users");
+
 
 // @route POST /api/invitations/create
 // @desc Create invitations for league or team
@@ -11,6 +15,26 @@ router.post("/create", (req, res) => {
     success: false,
     message: "This route isn't complete yet"
   });
+});
+
+// @route GET /api/invitations/user
+// @desc Load invitations for the logged in user
+// @access Public
+router.get("/user", async (req, res) => {
+  const userId = req.decoded.id;
+  let userData = await users.loadUser(userId);
+  let data = await invitations.loadInvitationsForUser(userData.email);
+  if (data.success) {
+    res.json({
+      success: true,
+      myInvitations: data.myInvitations
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "Error loading invitations"
+    });
+  }
 });
 
 module.exports = router;
