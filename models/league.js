@@ -17,7 +17,8 @@ const LeagueSchema = new Schema({
   },
   commissioner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
   },
   members: [{
     type: mongoose.Schema.Types.ObjectId,
