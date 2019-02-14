@@ -7,6 +7,7 @@ const cors = require("cors");
 const users = require("./routes/api/users");
 const leagues = require("./routes/api/leagues");
 const game_definitions = require("./routes/api/game_definitions");
+const invitations = require("./routes/api/invitations");
 const authMiddleware = require("./middleware/authentication");
 
 const app = express();
@@ -48,6 +49,7 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 app.use("/api/leagues", authMiddleware.checkToken, leagues);
 app.use("/api/gameDefinitions", authMiddleware.checkToken, game_definitions);
+app.use("/api/invitations", authMiddleware.checkToken, invitations);
 
 const port = process.env.PORT || 5000;
 

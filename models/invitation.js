@@ -15,7 +15,7 @@ const InvitationSchema = new Schema ({
     type: String,
     default: "Created"
   },
-  created_data: {
+  created_date: {
     type: Date,
     default: Date.now
   },
