@@ -26,7 +26,8 @@ module.exports.createInvitations = async function(type, groupId, emails, userId)
 
 module.exports.loadInvitationsForUser = async function(email) {
   try {
-    let foundInvitations = await Invitation.find({ invitedEmail: email }).exec();
+    let foundInvitations = await Invitation.find({ invitedEmail: email, invite_status: "Created" })
+    .exec();
     return {
       success: true,
       myInvitations: foundInvitations
