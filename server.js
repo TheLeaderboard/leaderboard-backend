@@ -4,11 +4,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
-const users = require("./routes/api/users");
-const leagues = require("./routes/api/leagues");
-const game_definitions = require("./routes/api/game_definitions");
-const invitations = require("./routes/api/invitations");
-const authMiddleware = require("./middleware/authentication");
 
 const app = express();
 
@@ -25,19 +20,29 @@ app.use(cors());
 
 //DB config
 const db = process.env.MONGO_URI;
+const mongooseOptions = {
+  userNewUrlParser: true
+};
 
 //Connect to MongoDB
-mongoose
-  .connect(
-    db,
-    { useNewUrlParser: true}
-  )
+mongoose.connect(db, mongooseOptions)
   .then(() => {
-    console.log("MongoDB successfully connected");
+    console.log("MongoDB connection established");
   })
   .catch(err => {
     console.log(err);
   });
+// load models
+require("./models/user");
+require("./models/game_definition");
+require("./models/invitation");
+require("./models/league");
+
+const users = require("./routes/api/users");
+const leagues = require("./routes/api/leagues");
+const game_definitions = require("./routes/api/game_definitions");
+const invitations = require("./routes/api/invitations");
+const authMiddleware = require("./middleware/authentication");
 
 // passport middleware
 app.use(passport.initialize());

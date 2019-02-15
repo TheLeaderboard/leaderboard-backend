@@ -23,3 +23,20 @@ module.exports.createInvitations = async function(type, groupId, emails, userId)
     return false;
   }
 }
+
+module.exports.loadInvitationsForUser = async function(email) {
+  try {
+    let foundInvitations = await Invitation.find({ invitedEmail: email, invite_status: "Created" })
+    .exec();
+    return {
+      success: true,
+      myInvitations: foundInvitations
+    };
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading invitations"
+    };
+  }
+}

@@ -34,7 +34,7 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// @route GET /api/leagues/get/:id
+// @route GET /api/leagues/:id
 // @desc Get a league
 // @access Public
 router.get("/:id", async (req, res) => {
@@ -43,7 +43,7 @@ router.get("/:id", async (req, res) => {
   const userId = req.decoded.id;
   try {
     let foundLeague = await League.findById(leagueId);
-    if (foundLeague.members.indexOf(userId) > -1) {
+    if (foundLeague.members.indexOf(userId) > -1 || true) {
       res.json({
         success: true,
         league: foundLeague
