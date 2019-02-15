@@ -9,7 +9,7 @@ const LeagueSchema = new Schema({
   },
   game_type: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "GameDefinition"
+    ref: "game_definitions"
   },
   created_date: {
     type: Date,
@@ -17,12 +17,12 @@ const LeagueSchema = new Schema({
   },
   commissioner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true
   },
   members: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "users"
   }]
 });
 

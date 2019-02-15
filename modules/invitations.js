@@ -1,5 +1,6 @@
 // load invitation model
 const Invitation = require("../models/invitation");
+const League = require("../models/league");
 
 module.exports.createInvitations = async function(type, groupId, emails, userId) {
   try {
@@ -27,6 +28,8 @@ module.exports.createInvitations = async function(type, groupId, emails, userId)
 module.exports.loadInvitationsForUser = async function(email) {
   try {
     let foundInvitations = await Invitation.find({ invited_email: email, invite_status: "Created" })
+    .populate("league_id", "name")
+    .populate("inviting_user", "username")
     .exec();
     return {
       success: true,

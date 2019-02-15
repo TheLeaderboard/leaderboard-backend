@@ -23,11 +23,11 @@ router.post("/create", (req, res) => {
 router.get("/user", async (req, res) => {
   const userId = req.decoded.id;
   let userData = await users.loadUser(userId);
-  let data = await invitations.loadInvitationsForUser(userData.email);
-  if (data.success) {
+  let foundInvitations = await invitations.loadInvitationsForUser(userData.user.email);
+  if (foundInvitations.success) {
     res.json({
       success: true,
-      myInvitations: data.myInvitations
+      myInvitations: foundInvitations.myInvitations
     });
   } else {
     res.json({
