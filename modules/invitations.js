@@ -1,6 +1,5 @@
 // load invitation model
 const Invitation = require("../models/invitation");
-const League = require("../models/league");
 
 module.exports.createInvitations = async function(type, groupId, emails, userId) {
   try {
@@ -40,6 +39,29 @@ module.exports.loadInvitationsForUser = async function(email) {
     return {
       success: false,
       message: "Error loading invitations"
+    };
+  }
+}
+
+module.exports.respondToInvitation = async function(inviteId, accepted) {
+  try {
+    const data = {};
+    if (accepted) {
+      data.invite_status = "Accepted";
+    } else {
+      data.invite_status = "Rejected";
+    }
+    let updatedInvitation = await Invitation.findByIdAndUpdate(inviteId, { $set: data }).exec();
+    console.log(updatedInvitation);
+    return {
+      success: true,
+      updatedInvitation: updatedInvitation
+    };
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error updating invitation"
     };
   }
 }
