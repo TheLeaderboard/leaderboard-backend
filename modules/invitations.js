@@ -23,7 +23,9 @@ module.exports.createInvitations = async function(type, groupId, emails, userId)
     return false;
   }
 }
-
+/**
+ * @param  {String} email
+ */
 module.exports.loadInvitationsForUser = async function(email) {
   try {
     let foundInvitations = await Invitation.find({ invited_email: email, invite_status: "Created" })
@@ -33,6 +35,26 @@ module.exports.loadInvitationsForUser = async function(email) {
     return {
       success: true,
       myInvitations: foundInvitations
+    };
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading invitations"
+    };
+  }
+}
+/**
+ * @param  {String} leagueId
+ */
+module.exports.loadInvitationsForLeague = async function(leagueId) {
+  try {
+    let foundInvitations = await Invitation.find({ league_id: leagueId, invite_status: "Created"})
+    .populate("inviting_user", "username")
+    .exec();
+    return {
+      success: true,
+      leagueInvitations: foundInvitations
     };
   } catch(err) {
     console.log(err);

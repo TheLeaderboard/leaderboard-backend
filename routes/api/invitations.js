@@ -37,6 +37,42 @@ router.get("/user", async (req, res) => {
   }
 });
 
+// @route GET /api/invitations/league/:leagueId
+// @desc Load invitations for the specified league
+// @access Public
+router.get("/league/:leagueId", async (req, res) => {
+  const leagueId = req.params.leagueId;
+  const userId = req.decoded.id;
+  let memberCheck = await leagues.checkUserMemberOfLeague(leagueId, userId);
+  if (memberCheck.success) {
+    if (memberCheck.userIsMember) {
+      // load invitations
+      let foundInvitations = await invitations.loadInvitationsForLeague(leagueId);
+      if (foundInvitations.success) {
+        res.json({
+          success: true,
+          leagueInvitations: foundInvitations.leagueInvitations
+        });
+      } else {
+        res.json({
+          success: false,
+          message: "error loading league invitations"
+        });
+      }
+    } else {
+      res.json({
+        success: false,
+        message: "User isn't a member of that league"
+      });
+    }
+  } else {
+    res.json({
+      success: false,
+      message: "Error checking league membership"
+    });
+  }
+});
+
 // @route PUT /api/invitations/:inviteId
 // @desc Updates an invitation
 // @access Public

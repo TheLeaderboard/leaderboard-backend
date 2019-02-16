@@ -17,3 +17,29 @@ module.exports.addUserToLeague = async function(leagueId, userId) {
     };
   }
 }
+/**
+ * @param  {String} leagueId
+ * @param  {String} userId
+ */
+module.exports.checkUserMemberOfLeague = async function(leagueId, userId) {
+  try {
+    let foundLeague = await League.findById(leagueId);
+    if (foundLeague.members.indexOf(userId) > -1) {
+      return {
+        success: true,
+        userIsMember: true
+      };
+    } else {
+      return {
+        success: true,
+        userIsMember: true
+      };
+    }
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading league"
+    };
+  }
+}
