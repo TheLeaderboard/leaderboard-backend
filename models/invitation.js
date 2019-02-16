@@ -9,7 +9,7 @@ const InvitationSchema = new Schema ({
   },
   league_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "League"
+    ref: "leagues"
   },
   invite_status: {
     type: String,
@@ -21,7 +21,7 @@ const InvitationSchema = new Schema ({
   },
   inviting_user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     required: true
   },
   invited_email: {

@@ -20,12 +20,9 @@ app.use(cors());
 
 //DB config
 const db = process.env.MONGO_URI;
-const mongooseOptions = {
-  userNewUrlParser: true
-};
 
 //Connect to MongoDB
-mongoose.connect(db, mongooseOptions)
+mongoose.connect(db, { useNewUrlParser: true })
   .then(() => {
     console.log("MongoDB connection established");
   })
