@@ -11,11 +11,13 @@ const leagues = require("../../modules/leagues");
 // @access Public
 router.post("/create", (req, res) => {
   console.log("Create invitation");
+  console.log(req.body);
   res.json({
     success: false,
     message: "This route isn't complete yet"
   });
 });
+
 
 // @route GET /api/invitations/user
 // @desc Load invitations for the logged in user
@@ -37,6 +39,42 @@ router.get("/user", async (req, res) => {
   }
 });
 
+// @route GET /api/invitations/league/:leagueId
+// @desc Load invitations for the specified league
+// @access Public
+router.get("/league/:leagueId", async (req, res) => {
+  const leagueId = req.params.leagueId;
+  const userId = req.decoded.id;
+  let memberCheck = await leagues.checkUserMemberOfLeague(leagueId, userId);
+  if (memberCheck.success) {
+    if (memberCheck.userIsMember) {
+      // load invitations
+      let foundInvitations = await invitations.loadInvitationsForLeague(leagueId);
+      if (foundInvitations.success) {
+        res.json({
+          success: true,
+          leagueInvitations: foundInvitations.leagueInvitations
+        });
+      } else {
+        res.json({
+          success: false,
+          message: "error loading league invitations"
+        });
+      }
+    } else {
+      res.json({
+        success: false,
+        message: "User isn't a member of that league"
+      });
+    }
+  } else {
+    res.json({
+      success: false,
+      message: "Error checking league membership"
+    });
+  }
+});
+
 // @route PUT /api/invitations/:inviteId
 // @desc Updates an invitation
 // @access Public
@@ -51,7 +89,7 @@ router.put("/:inviteId", async (req, res) => {
     updatedLeague = await leagues.addUserToLeague(leagueId, userId);
   }
   // update invitation
-  if (accepted && updatedLeague.success) {
+  if (!accepted || updatedLeague.success) {
     let updatedInvitation = await invitations.respondToInvitation(inviteId, accepted);
     if (updatedInvitation.success) {
       res.json({
