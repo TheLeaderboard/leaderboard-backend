@@ -9,13 +9,20 @@ const leagues = require("../../modules/leagues");
 // @route POST /api/invitations/create
 // @desc Create invitations for league or team
 // @access Public
-router.post("/create", (req, res) => {
-  console.log("Create invitation");
+router.post("/create", async (req, res) => {
   console.log(req.body);
-  res.json({
-    success: false,
-    message: "This route isn't complete yet"
-  });
+  const userId = req.decoded.id;
+  let inviteResult = await invitations.createInvitations(req.body.type, req.body.groupId, req.body.emails, userId);
+  if (inviteResult.success) {
+    res.json({
+      success: true
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "Error creating invitations"
+    });
+  }
 });
 
 

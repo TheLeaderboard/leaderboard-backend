@@ -17,10 +17,15 @@ module.exports.createInvitations = async function(type, groupId, emails, userId)
       }
       await newInvitation.save();
     }
-    return true;
+    return {
+      success: true
+    };
   } catch(err) {
     console.log(err);
-    return false;
+    return {
+      success: false,
+      message: "Error creating invitations"
+    };
   }
 }
 /**
