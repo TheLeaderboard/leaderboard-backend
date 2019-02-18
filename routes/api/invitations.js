@@ -11,11 +11,13 @@ const leagues = require("../../modules/leagues");
 // @access Public
 router.post("/create", (req, res) => {
   console.log("Create invitation");
+  console.log(req.body);
   res.json({
     success: false,
     message: "This route isn't complete yet"
   });
 });
+
 
 // @route GET /api/invitations/user
 // @desc Load invitations for the logged in user
@@ -87,7 +89,7 @@ router.put("/:inviteId", async (req, res) => {
     updatedLeague = await leagues.addUserToLeague(leagueId, userId);
   }
   // update invitation
-  if (accepted && updatedLeague.success) {
+  if (!accepted || updatedLeague.success) {
     let updatedInvitation = await invitations.respondToInvitation(inviteId, accepted);
     if (updatedInvitation.success) {
       res.json({
