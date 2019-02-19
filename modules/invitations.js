@@ -79,7 +79,6 @@ module.exports.respondToInvitation = async function(inviteId, accepted) {
       data.invite_status = "Rejected";
     }
     let updatedInvitation = await Invitation.findByIdAndUpdate(inviteId, { $set: data }).exec();
-    console.log(updatedInvitation);
     return {
       success: true,
       updatedInvitation: updatedInvitation

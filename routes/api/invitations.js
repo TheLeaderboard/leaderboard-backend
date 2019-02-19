@@ -10,7 +10,6 @@ const leagues = require("../../modules/leagues");
 // @desc Create invitations for league or team
 // @access Public
 router.post("/create", async (req, res) => {
-  console.log(req.body);
   const userId = req.decoded.id;
   let inviteResult = await invitations.createInvitations(req.body.type, req.body.groupId, req.body.emails, userId);
   if (inviteResult.success) {
