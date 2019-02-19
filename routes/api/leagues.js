@@ -42,7 +42,7 @@ router.get("/:id", async (req, res) => {
   const leagueId = req.params.id;
   const userId = req.decoded.id;
   try {
-    let foundLeague = await League.findById(leagueId).populate("game_type").populate("members").exec();
+    let foundLeague = await League.findById(leagueId).populate("game_type").populate("members", "name username _id email").exec();
     if (foundLeague.members.indexOf(userId) > -1 || true) {
       res.json({
         success: true,
