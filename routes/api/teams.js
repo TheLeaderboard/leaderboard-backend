@@ -5,6 +5,27 @@ const router = express.Router();
 const teams = require("../../modules/teams");
 const leagues = require("../../modules/leagues");
 
+// @route POST /api/teams/create
+// @desc Create new team
+// @access Public
+router.post("/create", async (req, res) => {
+  const userId = req.decoded.id;
+  const teamName = req.body.teamName;
+  const members = req.body.members;
+  const leagueId = req.body.leagueId;
+  let teamResult = await teams.createTeam(teamName, members, leagueId, userId);
+  if (teamResult.success) {
+    res.json({
+      success: true
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "Error creating team"
+    });
+  }
+});
+
 // @route GET /api/teams/league/:leagueId
 // @desc Load teams for the specified league
 // @access Public

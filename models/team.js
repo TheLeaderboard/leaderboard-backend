@@ -20,12 +20,17 @@ const TeamSchema = new Schema({
     ref: "users"
   },
   default_user_team: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   league: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "leagues",
-    index: true
+    sparse: true
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
   }
 });
 

@@ -41,7 +41,6 @@ router.post("/register", async (req, res) => {
           newUser
             .save()
             .then(async user => {
-              console.log(user);
               // create default team
               await teams.createUserTeam(user._id);
               // create JWT payload
