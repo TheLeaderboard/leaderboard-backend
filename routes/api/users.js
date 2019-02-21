@@ -10,10 +10,12 @@ const validateLoginInput = require("../../validation/login");
 // load user model
 const User = require("../../models/user");
 
+const teams = require("../../modules/teams");
+
 // @route POST api/users/register
 // @desc Register user
 // @access Public
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   // form validation
   const { errors, isValid } = validateRegisterInput(req.body);
   // check validation
@@ -38,7 +40,10 @@ router.post("/register", (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then(user => {
+            .then(async user => {
+              console.log(user);
+              // create default team
+              await teams.createUserTeam(user._id);
               // create JWT payload
               const payload = {
                 id: user.id,

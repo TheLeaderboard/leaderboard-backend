@@ -8,7 +8,8 @@ const TeamSchema = new Schema({
   },
   members: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users"
+    ref: "users",
+    index: true
   }],
   created_date: {
     type: Date,
@@ -20,6 +21,11 @@ const TeamSchema = new Schema({
   },
   default_user_team: {
     type: Boolean
+  },
+  league: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "leagues",
+    index: true
   }
 });
 
