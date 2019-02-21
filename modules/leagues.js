@@ -32,7 +32,7 @@ module.exports.checkUserMemberOfLeague = async function(leagueId, userId) {
     } else {
       return {
         success: true,
-        userIsMember: true
+        userIsMember: false
       };
     }
   } catch(err) {
