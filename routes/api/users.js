@@ -47,7 +47,7 @@ router.post("/register", async (req, res) => {
               // create JWT payload
               const payload = {
                 id: user.id,
-                name: user.name
+                username: user.username
               };
               // sign token
               jwt.sign(
@@ -96,7 +96,7 @@ router.post("/login", (req, res) => {
           // create JWT payload
           const payload = {
             id: user.id,
-            name: user.name
+            username: user.username
           };
           // sign token
           jwt.sign(
