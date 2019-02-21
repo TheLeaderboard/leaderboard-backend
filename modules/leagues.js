@@ -32,8 +32,32 @@ module.exports.checkUserMemberOfLeague = async function(leagueId, userId) {
     } else {
       return {
         success: true,
-        userIsMember: true
+        userIsMember: false
       };
+    }
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading league"
+    };
+  }
+}
+
+module.exports.createLeague = async function(name, game_type, userId, default_season, team_size) {
+  try {
+    const newLeague = new League({
+      name: name,
+      game_type: game_type,
+      commissioner: userId,
+      default_season: default_season,
+      team_size: team_size
+    });
+    newLeague.members.push(userId);
+    let createdLeague = await newLeague.save();
+    return {
+      success: true,
+      createdLeague: createdLeague
     }
   } catch(err) {
     console.log(err);

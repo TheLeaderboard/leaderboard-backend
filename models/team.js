@@ -1,36 +1,37 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// create schema
-const LeagueSchema = new Schema({
+const TeamSchema = new Schema({
   name: {
     type: String,
     required: true
   },
-  game_type: {
+  members: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "game_definitions"
-  },
-  team_size: {
-    type: Number
-  },
+    ref: "users",
+    index: true
+  }],
   created_date: {
     type: Date,
     default: Date.now
   },
-  default_season: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "seasons"
-  },
-  commissioner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true
-  },
-  members: [{
+  captain: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
-  }]
+  },
+  default_user_team: {
+    type: Boolean,
+    default: false
+  },
+  league: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "leagues",
+    sparse: true
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
+  }
 });
 
-module.exports = League = mongoose.model("leagues", LeagueSchema);
+module.exports = Team = mongoose.model("teams", TeamSchema);
