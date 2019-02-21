@@ -47,7 +47,6 @@ module.exports.createTeam = async function(name, members, leagueId, userId) {
 module.exports.loadLeagueTeams = async function(leagueId) {
   try {
     let foundTeams = await Team.find({ league: leagueId}).exec();
-    console.log(foundTeams);
     return {
       success: true,
       teams: foundTeams
