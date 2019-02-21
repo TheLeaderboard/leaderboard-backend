@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-// load invitations module
+// load modules
 const invitations = require("../../modules/invitations");
+const seasons = require("../../modules/seasons");
+const leagues = require("../../modules/leagues");
 
 // load league model
 const League = require("../../models/league");
@@ -12,18 +14,15 @@ const League = require("../../models/league");
 // @access Public
 router.post("/create", async (req, res) => {
   const userId = req.decoded.id;
-  const newLeague = new League({
-    name: req.body.name,
-    game_type: req.body.gameType,
-    commissioner: userId
-  });
-  newLeague.members.push(userId);
+  const name = req.body.name;
+  const game_type = req.body.gameType
   try {
-    let createdLeague = await newLeague.save();
-    await invitations.createInvitations("league", createdLeague._id, req.body.invitedEmails, userId);
+    let seasonResult = await seasons.createSeason(true);
+    let leagueResult = await leagues.createLeague(name, game_type, userId, seasonResult.season_id);
+    await invitations.createInvitations("league", leagueResult.createdLeague._id, req.body.invitedEmails, userId);
     res.json({
       success: true,
-      league: createdLeague
+      league: leagueResult.createdLeague
     });
   } catch(err) {
     console.log(err);
