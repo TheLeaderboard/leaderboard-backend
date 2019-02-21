@@ -9,7 +9,6 @@ module.exports.createUserTeam = async function(userId) {
       default_user_team: true
     });
     let createdTeam = await newTeam.save();
-    console.log(createdTeam);
     return {
       success: true,
       userTeam: createdTeam
@@ -19,6 +18,23 @@ module.exports.createUserTeam = async function(userId) {
     return {
       success: false,
       message: "Error creating user team"
+    };
+  }
+}
+
+module.exports.loadLeagueTeams = async function(leagueId) {
+  try {
+    let foundTeams = await Team.find({ league: leagueId}).exec();
+    console.log(foundTeams);
+    return {
+      success: true,
+      teams: foundTeams
+    };
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading league teams"
     };
   }
 }

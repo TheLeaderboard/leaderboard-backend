@@ -64,7 +64,7 @@ router.get("/league/:leagueId", async (req, res) => {
       } else {
         res.json({
           success: false,
-          message: "error loading league invitations"
+          message: "Error loading league invitations"
         });
       }
     } else {
