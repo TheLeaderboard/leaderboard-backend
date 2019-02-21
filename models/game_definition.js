@@ -6,6 +6,10 @@ const GameDefinitionSchema = new Schema({
   name: {
     type: String,
     required: true
+  },
+  default_team_size: {
+    type: Number,
+    required: true
   }
 });
 

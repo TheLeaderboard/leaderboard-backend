@@ -11,6 +11,9 @@ const LeagueSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "game_definitions"
   },
+  team_size: {
+    type: Number
+  },
   created_date: {
     type: Date,
     default: Date.now
