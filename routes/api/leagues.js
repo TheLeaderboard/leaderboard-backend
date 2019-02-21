@@ -5,6 +5,7 @@ const router = express.Router();
 const invitations = require("../../modules/invitations");
 const seasons = require("../../modules/seasons");
 const leagues = require("../../modules/leagues");
+const gameDefinitions = require("../../modules/game_definitions");
 
 // load league model
 const League = require("../../models/league");
@@ -18,7 +19,8 @@ router.post("/create", async (req, res) => {
   const game_type = req.body.gameType
   try {
     let seasonResult = await seasons.createSeason(true);
-    let leagueResult = await leagues.createLeague(name, game_type, userId, seasonResult.season_id);
+    let gameDefResult = await gameDefinitions.loadGameDefinition(game_type);
+    let leagueResult = await leagues.createLeague(name, game_type, userId, seasonResult.season_id, gameDefResult.game_definition.default_team_size);
     await invitations.createInvitations("league", leagueResult.createdLeague._id, req.body.invitedEmails, userId);
     res.json({
       success: true,
