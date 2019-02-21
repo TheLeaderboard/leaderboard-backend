@@ -34,6 +34,7 @@ require("./models/user");
 require("./models/game_definition");
 require("./models/invitation");
 require("./models/league");
+require("./models/season");
 
 const users = require("./routes/api/users");
 const leagues = require("./routes/api/leagues");

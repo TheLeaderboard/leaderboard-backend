@@ -18,6 +18,10 @@ const LeagueSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  default_season: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "seasons"
+  },
   commissioner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
