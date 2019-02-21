@@ -20,7 +20,7 @@ router.post("/create", async (req, res) => {
   try {
     let seasonResult = await seasons.createSeason(true);
     let gameDefResult = await gameDefinitions.loadGameDefinition(game_type);
-    let leagueResult = await leagues.createLeague(name, game_type, userId, seasonResult.season_id, gameDefResult.game_definition.default_team_size);
+    let leagueResult = await leagues.createLeague(name, game_type, userId, seasonResult.season_id, gameDefResult.game_definition.default_team_size, gameDefResult.game_definition.default_win_loss_only);
     await invitations.createInvitations("league", leagueResult.createdLeague._id, req.body.invitedEmails, userId);
     res.json({
       success: true,

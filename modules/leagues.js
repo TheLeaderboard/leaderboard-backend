@@ -44,14 +44,15 @@ module.exports.checkUserMemberOfLeague = async function(leagueId, userId) {
   }
 }
 
-module.exports.createLeague = async function(name, game_type, userId, default_season, team_size) {
+module.exports.createLeague = async function(name, game_type, userId, default_season, team_size, win_loss_only) {
   try {
     const newLeague = new League({
       name: name,
       game_type: game_type,
       commissioner: userId,
       default_season: default_season,
-      team_size: team_size
+      team_size: team_size,
+      win_loss_only: win_loss_only
     });
     newLeague.members.push(userId);
     let createdLeague = await newLeague.save();

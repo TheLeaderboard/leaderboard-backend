@@ -30,7 +30,10 @@ const LeagueSchema = new Schema({
   members: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "users"
-  }]
+  }],
+  win_loss_only: {
+    type: Boolean
+  }
 });
 
 module.exports = League = mongoose.model("leagues", LeagueSchema);
