@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const TeamSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   members: [{
     type: mongoose.Schema.Types.ObjectId,
