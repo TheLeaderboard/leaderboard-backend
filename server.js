@@ -36,12 +36,14 @@ require("./models/invitation");
 require("./models/league");
 require("./models/season");
 require("./models/team");
+require("./models/game");
 
 const users = require("./routes/api/users");
 const leagues = require("./routes/api/leagues");
 const game_definitions = require("./routes/api/game_definitions");
 const invitations = require("./routes/api/invitations");
 const teams = require("./routes/api/teams");
+const games = require("./routes/api/games");
 const authMiddleware = require("./middleware/authentication");
 
 // passport middleware
@@ -56,6 +58,7 @@ app.use("/api/leagues", authMiddleware.checkToken, leagues);
 app.use("/api/gameDefinitions", authMiddleware.checkToken, game_definitions);
 app.use("/api/invitations", authMiddleware.checkToken, invitations);
 app.use("/api/teams", authMiddleware.checkToken, teams);
+app.use("/api/games", authMiddleware.checkToken, games);
 
 const port = process.env.PORT || 5000;
 
