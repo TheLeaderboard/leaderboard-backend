@@ -14,6 +14,14 @@ const GameSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "teams"
   },
+  home_team: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "teams"
+  },
+  away_team: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "teams"
+  },
   season: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "seasons"
@@ -28,6 +36,9 @@ const GameSchema = new Schema({
   loser_score: {
     type: Number
   },
+  team_size: {
+    type: Number
+  },
   created_date: {
     type: Date,
     default: Date.now
@@ -35,6 +46,13 @@ const GameSchema = new Schema({
   game_date: {
     type: Date,
     default: Date.now
+  },
+  win_loss: {
+    type: Boolean
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
   }
 });
 
