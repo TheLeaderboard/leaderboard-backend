@@ -22,6 +22,23 @@ module.exports.createUserTeam = async function(userId) {
   }
 }
 
+module.exports.loadTeamByName = async function(teamName) {
+  try {
+    let foundTeam = await Team.findOne({ name: teamName}).exec();
+    console.log(foundTeam);
+    return {
+      success: true,
+      team: foundTeam
+    };
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading team"
+    };
+  }
+}
+
 module.exports.createTeam = async function(name, members, leagueId, userId) {
   try {
     const newTeam = new Team({
