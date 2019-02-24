@@ -22,6 +22,14 @@ const GameSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "teams"
   },
+  home_user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
+  },
+  away_user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
+  },
   season: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "seasons"

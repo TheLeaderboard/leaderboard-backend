@@ -23,4 +23,23 @@ router.post("/create", async (req, res) => {
   }
 });
 
+// @route GET /api/games/league/:leagueId
+// @desc Load league games
+// @access Public
+router.get("/league/:leagueId", async (req, res) => {
+  const leagueId = req.params.leagueId;
+  let gameResult = await games.loadLeagueGames(leagueId);
+  if (gameResult.success) {
+    res.json({
+      success: true,
+      games: gameResult.games
+    });
+  } else {
+    res.json({
+      success: false,
+      message: gameResult.message
+    });
+  }
+})
+
 module.exports = router;

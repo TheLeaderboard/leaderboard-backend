@@ -1,6 +1,10 @@
 // load game model
 const Game = require("../models/game");
 
+// load other modules
+const teams = require("./teams");
+const users = require("./users");
+
 module.exports.createGame = async function(gameData, userId) {
   try {
     const newGame = new Game({
@@ -31,6 +35,25 @@ module.exports.createGame = async function(gameData, userId) {
         newGame.loser_score = Number(gameData.home_score);
       }
     }
+    if (gameData.team_size == 1) {
+      // load teams
+      newGame.home_user = newGame.home_team;
+      newGame.away_user = newGame.away_team;
+      let userHomeResult = await teams.loadTeamByName(newGame.home_team);
+      let userAwayResult = await teams.loadTeamByName(newGame.away_team);
+      let userHome = userHomeResult.team;
+      let userAway = userAwayResult.team;
+      newGame.teams = [userHome._id, userAway._id];
+      if (newGame.home_team === newGame.winner) {
+        newGame.winner = userHome._id;
+        newGame.loser = userAway._id;
+      } else {
+        newGame.winner = userAway._id;
+        newGame.loser = userHome._id;
+      }
+      newGame.home_team = userHome._id;
+      newGame.away_team = userAway._id;
+    }
     await newGame.save();
     return {
       success: true
@@ -40,6 +63,31 @@ module.exports.createGame = async function(gameData, userId) {
     return {
       success: false,
       message: "Error creating game"
+    };
+  }
+}
+
+module.exports.loadLeagueGames = async function(leagueId) {
+  try {
+    let foundGames = await Game.find({ league: leagueId })
+      .populate("home_team", "members name")
+      .populate("away_team", "members name")
+      .populate("home_user", "username name")
+      .populate("away_user", "username name")
+      .exec();
+    // sort games
+    foundGames.sort((a, b) => {
+      return b.game_date - a.game_date;
+    });
+    return {
+      success: true,
+      games: foundGames
+    }
+  } catch(err) {
+    console.log(err);
+    return {
+      success: false,
+      message: "Error loading games"
     };
   }
 }
