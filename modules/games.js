@@ -44,7 +44,7 @@ module.exports.createGame = async function(gameData, userId) {
       let userHome = userHomeResult.team;
       let userAway = userAwayResult.team;
       newGame.teams = [userHome._id, userAway._id];
-      if (newGame.home_team === newGame.winner) {
+      if (gameData.home_team == gameData.selected_winner) {
         newGame.winner = userHome._id;
         newGame.loser = userAway._id;
       } else {
