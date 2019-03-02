@@ -1,67 +1,68 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const GameSchema = new Schema({
   teams: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "teams"
+    ref: "teams",
   }],
   winner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "teams"
+    ref: "teams",
   },
   loser: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "teams"
+    ref: "teams",
   },
   home_team: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "teams"
+    ref: "teams",
   },
   away_team: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "teams"
+    ref: "teams",
   },
   home_user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users"
+    ref: "users",
   },
   away_user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users"
+    ref: "users",
   },
   season: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "seasons"
+    ref: "seasons",
   },
   league: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "leagues"
+    ref: "leagues",
   },
   winner_score: {
-    type: Number
+    type: Number,
   },
   loser_score: {
-    type: Number
+    type: Number,
   },
   team_size: {
-    type: Number
+    type: Number,
   },
   created_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   game_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   win_loss: {
-    type: Boolean
+    type: Boolean,
   },
   created_by: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users"
-  }
+    ref: "users",
+  },
 });
 
 module.exports = Game = mongoose.model("games", GameSchema);

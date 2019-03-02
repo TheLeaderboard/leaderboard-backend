@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 function checkToken(req, res, next) {
-  let token = req.headers["x-access-token"] || req.headers["authorization"] || "";
+  let token = req.headers["x-access-token"] || req.headers.authorization || "";
   if (token.startsWith("Bearer ")) {
     // remove bearer from string
     token = token.slice(7, token.length);
@@ -12,21 +12,21 @@ function checkToken(req, res, next) {
       if (err) {
         return res.json({
           success: false,
-          message: "Token is not valid"
+          message: "Token is not valid",
         });
-      } else {
-        req.decoded = decoded;
-        next();
       }
+      // no errors
+      req.decoded = decoded;
+      next();
     });
   } else {
     return res.json({
       success: false,
-      message: "Auth token is not supplied"
+      message: "Auth token is not supplied",
     });
   }
-};
+}
 
 module.exports = {
-  checkToken: checkToken
-}
+  checkToken,
+};

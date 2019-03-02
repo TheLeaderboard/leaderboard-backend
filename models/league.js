@@ -1,39 +1,40 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 // create schema
 const LeagueSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   game_type: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "game_definitions"
+    ref: "game_definitions",
   },
   team_size: {
-    type: Number
+    type: Number,
   },
   created_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   default_season: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "seasons"
+    ref: "seasons",
   },
   commissioner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
-    required: true
+    required: true,
   },
   members: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "users"
+    ref: "users",
   }],
   win_loss_only: {
-    type: Boolean
-  }
+    type: Boolean,
+  },
 });
 
 module.exports = League = mongoose.model("leagues", LeagueSchema);

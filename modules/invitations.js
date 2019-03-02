@@ -1,7 +1,7 @@
 // load invitation model
 const Invitation = require("../models/invitation");
 
-module.exports.createInvitations = async function(type, groupId, emails, userId) {
+module.exports.createInvitations = async function createInvitations(type, groupId, emails, userId) {
   try {
     for (const email in emails) {
       // create invitation
@@ -18,59 +18,59 @@ module.exports.createInvitations = async function(type, groupId, emails, userId)
       await newInvitation.save();
     }
     return {
-      success: true
+      success: true,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error creating invitations"
+      message: "Error creating invitations",
     };
   }
-}
+};
 /**
  * @param  {String} email
  */
-module.exports.loadInvitationsForUser = async function(email) {
+module.exports.loadInvitationsForUser = async function loadInvitationsForUser(email) {
   try {
-    let foundInvitations = await Invitation.find({ invited_email: email, invite_status: "Created" })
-    .populate("league_id", "name")
-    .populate("inviting_user", "username")
-    .exec();
+    const foundInvitations = await Invitation.find({ invited_email: email, invite_status: "Created" })
+      .populate("league_id", "name")
+      .populate("inviting_user", "username")
+      .exec();
     return {
       success: true,
-      myInvitations: foundInvitations
+      myInvitations: foundInvitations,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error loading invitations"
+      message: "Error loading invitations",
     };
   }
-}
+};
 /**
  * @param  {String} leagueId
  */
-module.exports.loadInvitationsForLeague = async function(leagueId) {
+module.exports.loadInvitationsForLeague = async function loadInvitationsForLeague(leagueId) {
   try {
-    let foundInvitations = await Invitation.find({ league_id: leagueId, invite_status: "Created"})
-    .populate("inviting_user", "username")
-    .exec();
+    const foundInvitations = await Invitation.find({ league_id: leagueId, invite_status: "Created" })
+      .populate("inviting_user", "username")
+      .exec();
     return {
       success: true,
-      leagueInvitations: foundInvitations
+      leagueInvitations: foundInvitations,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error loading invitations"
+      message: "Error loading invitations",
     };
   }
-}
+};
 
-module.exports.respondToInvitation = async function(inviteId, accepted) {
+module.exports.respondToInvitation = async function respondToInvitation(inviteId, accepted) {
   try {
     const data = {};
     if (accepted) {
@@ -78,16 +78,16 @@ module.exports.respondToInvitation = async function(inviteId, accepted) {
     } else {
       data.invite_status = "Rejected";
     }
-    let updatedInvitation = await Invitation.findByIdAndUpdate(inviteId, { $set: data }).exec();
+    const updatedInvitation = await Invitation.findByIdAndUpdate(inviteId, { $set: data }).exec();
     return {
       success: true,
-      updatedInvitation: updatedInvitation
+      updatedInvitation,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error updating invitation"
+      message: "Error updating invitation",
     };
   }
-}
+};

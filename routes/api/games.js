@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 // load modules
@@ -10,15 +11,15 @@ const games = require("../../modules/games");
 router.post("/create", async (req, res) => {
   const gameData = req.body;
   const userId = req.decoded.id;
-  let gameResult = await games.createGame(gameData, userId);
+  const gameResult = await games.createGame(gameData, userId);
   if (gameResult.success) {
     res.json({
-      success: true
+      success: true,
     });
   } else {
     res.json({
       success: false,
-      message: gameResult.message
+      message: gameResult.message,
     });
   }
 });
@@ -27,19 +28,19 @@ router.post("/create", async (req, res) => {
 // @desc Load league games
 // @access Public
 router.get("/league/:leagueId", async (req, res) => {
-  const leagueId = req.params.leagueId;
-  let gameResult = await games.loadLeagueGames(leagueId);
+  const { leagueId } = req.params;
+  const gameResult = await games.loadLeagueGames(leagueId);
   if (gameResult.success) {
     res.json({
       success: true,
-      games: gameResult.games
+      games: gameResult.games,
     });
   } else {
     res.json({
       success: false,
-      message: gameResult.message
+      message: gameResult.message,
     });
   }
-})
+});
 
 module.exports = router;

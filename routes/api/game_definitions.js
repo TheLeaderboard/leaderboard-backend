@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 // load game definition model model
@@ -10,17 +11,17 @@ const GameDefinition = require("../../models/game_definition");
 router.get("/", (req, res) => {
   // load all game types from database
   GameDefinition.find({})
-    .then(gameDefs => {
+    .then((gameDefs) => {
       res.json({
         success: true,
-        game_definitions: gameDefs
+        game_definitions: gameDefs,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.json({
         success: false,
-        message: "Couldn't load game definitions"
+        message: "Couldn't load game definitions",
       });
     });
 });

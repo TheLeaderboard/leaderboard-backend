@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 // load modules
@@ -11,15 +12,15 @@ const leagues = require("../../modules/leagues");
 // @access Public
 router.post("/create", async (req, res) => {
   const userId = req.decoded.id;
-  let inviteResult = await invitations.createInvitations(req.body.type, req.body.groupId, req.body.emails, userId);
+  const inviteResult = await invitations.createInvitations(req.body.type, req.body.groupId, req.body.emails, userId);
   if (inviteResult.success) {
     res.json({
-      success: true
+      success: true,
     });
   } else {
     res.json({
       success: false,
-      message: "Error creating invitations"
+      message: "Error creating invitations",
     });
   }
 });
@@ -30,17 +31,17 @@ router.post("/create", async (req, res) => {
 // @access Public
 router.get("/user", async (req, res) => {
   const userId = req.decoded.id;
-  let userData = await users.loadUser(userId);
-  let foundInvitations = await invitations.loadInvitationsForUser(userData.user.email);
+  const userData = await users.loadUser(userId);
+  const foundInvitations = await invitations.loadInvitationsForUser(userData.user.email);
   if (foundInvitations.success) {
     res.json({
       success: true,
-      myInvitations: foundInvitations.myInvitations
+      myInvitations: foundInvitations.myInvitations,
     });
   } else {
     res.json({
       success: false,
-      message: "Error loading invitations"
+      message: "Error loading invitations",
     });
   }
 });
@@ -49,34 +50,34 @@ router.get("/user", async (req, res) => {
 // @desc Load invitations for the specified league
 // @access Public
 router.get("/league/:leagueId", async (req, res) => {
-  const leagueId = req.params.leagueId;
+  const { leagueId } = req.params;
   const userId = req.decoded.id;
-  let memberCheck = await leagues.checkUserMemberOfLeague(leagueId, userId);
+  const memberCheck = await leagues.checkUserMemberOfLeague(leagueId, userId);
   if (memberCheck.success) {
     if (memberCheck.userIsMember) {
       // load invitations
-      let foundInvitations = await invitations.loadInvitationsForLeague(leagueId);
+      const foundInvitations = await invitations.loadInvitationsForLeague(leagueId);
       if (foundInvitations.success) {
         res.json({
           success: true,
-          leagueInvitations: foundInvitations.leagueInvitations
+          leagueInvitations: foundInvitations.leagueInvitations,
         });
       } else {
         res.json({
           success: false,
-          message: "Error loading league invitations"
+          message: "Error loading league invitations",
         });
       }
     } else {
       res.json({
         success: false,
-        message: "User isn't a member of that league"
+        message: "User isn't a member of that league",
       });
     }
   } else {
     res.json({
       success: false,
-      message: "Error checking league membership"
+      message: "Error checking league membership",
     });
   }
 });
@@ -85,10 +86,9 @@ router.get("/league/:leagueId", async (req, res) => {
 // @desc Updates an invitation
 // @access Public
 router.put("/:inviteId", async (req, res) => {
-  const inviteId = req.params.inviteId;
+  const { inviteId } = req.params;
   const userId = req.decoded.id;
-  const accepted = req.body.accepted;
-  const leagueId = req.body.leagueId;
+  const { accepted, leagueId } = req.body;
   let updatedLeague = {};
   // add user to league
   if (accepted) {
@@ -96,21 +96,21 @@ router.put("/:inviteId", async (req, res) => {
   }
   // update invitation
   if (!accepted || updatedLeague.success) {
-    let updatedInvitation = await invitations.respondToInvitation(inviteId, accepted);
+    const updatedInvitation = await invitations.respondToInvitation(inviteId, accepted);
     if (updatedInvitation.success) {
       res.json({
-        success: true
+        success: true,
       });
     } else {
       res.json({
         success: false,
-        message: "Error updating invitation"
+        message: "Error updating invitation",
       });
     }
   } else {
     res.json({
       success: false,
-      message: "Error updating league"
+      message: "Error updating league",
     });
   }
 });
