@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 // load modules
@@ -15,22 +16,21 @@ const League = require("../../models/league");
 // @access Public
 router.post("/create", async (req, res) => {
   const userId = req.decoded.id;
-  const name = req.body.name;
-  const game_type = req.body.gameType
+  const { name, gameType } = req.body;
   try {
-    let seasonResult = await seasons.createSeason(true);
-    let gameDefResult = await gameDefinitions.loadGameDefinition(game_type);
-    let leagueResult = await leagues.createLeague(name, game_type, userId, seasonResult.season_id, gameDefResult.game_definition.default_team_size, gameDefResult.game_definition.default_win_loss_only);
+    const seasonResult = await seasons.createSeason(true);
+    const gameDefResult = await gameDefinitions.loadGameDefinition(gameType);
+    const leagueResult = await leagues.createLeague(name, gameType, userId, seasonResult.season_id, gameDefResult.game_definition.default_team_size, gameDefResult.game_definition.default_win_loss_only);
     await invitations.createInvitations("league", leagueResult.createdLeague._id, req.body.invitedEmails, userId);
     res.json({
       success: true,
-      league: leagueResult.createdLeague
+      league: leagueResult.createdLeague,
     });
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.json({
       success: false,
-      message: "Couldn't create league"
+      message: "Couldn't create league",
     });
   }
 });
@@ -43,23 +43,23 @@ router.get("/:id", async (req, res) => {
   const leagueId = req.params.id;
   const userId = req.decoded.id;
   try {
-    let foundLeague = await League.findById(leagueId).populate("game_type").populate("members", "name username _id email").exec();
+    const foundLeague = await League.findById(leagueId).populate("game_type").populate("members", "name username _id email").exec();
     if (foundLeague.members.indexOf(userId) > -1 || true) {
       res.json({
         success: true,
-        league: foundLeague
+        league: foundLeague,
       });
     } else {
       res.json({
         success: false,
-        message: "User isn't a member of that league"
+        message: "User isn't a member of that league",
       });
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.json({
       success: false,
-      message: "Couldn't find league with that ID"
+      message: "Couldn't find league with that ID",
     });
   }
 });
@@ -70,16 +70,16 @@ router.get("/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   const userId = req.decoded.id;
   try {
-    let foundLeagues = await League.find({ members: userId }).exec();
+    const foundLeagues = await League.find({ members: userId }).exec();
     res.json({
       success: true,
-      myLeagues: foundLeagues
+      myLeagues: foundLeagues,
     });
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.json({
       success: false,
-      message: "Couldn't find any leagues"
+      message: "Couldn't find any leagues",
     });
   }
 });

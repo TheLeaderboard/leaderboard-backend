@@ -1,34 +1,35 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 // create schema
-const InvitationSchema = new Schema ({
+const InvitationSchema = new Schema({
   invite_type: {
     type: String,
-    required: true
+    required: true,
   },
   league_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "leagues"
+    ref: "leagues",
   },
   invite_status: {
     type: String,
-    default: "Created"
+    default: "Created",
   },
   created_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   inviting_user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
-    required: true
+    required: true,
   },
   invited_email: {
     type: String,
     required: true,
-    index: true
-  }
+    index: true,
+  },
 });
 
 module.exports = Invitation = mongoose.model("invitations", InvitationSchema);

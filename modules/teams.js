@@ -1,78 +1,77 @@
 const Team = require("../models/team");
 
-module.exports.createUserTeam = async function(userId) {
+module.exports.createUserTeam = async function createUserTeam(userId) {
   try {
     const newTeam = new Team({
       name: userId,
       members: [userId],
       captian: userId,
-      default_user_team: true
+      default_user_team: true,
     });
-    let createdTeam = await newTeam.save();
+    const createdTeam = await newTeam.save();
     return {
       success: true,
-      userTeam: createdTeam
+      userTeam: createdTeam,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error creating user team"
+      message: "Error creating user team",
     };
   }
-}
+};
 
-module.exports.loadTeamByName = async function(teamName) {
+module.exports.loadTeamByName = async function loadTeamByName(teamName) {
   try {
-    let foundTeam = await Team.findOne({ name: teamName}).exec();
-    console.log(foundTeam);
+    const foundTeam = await Team.findOne({ name: teamName }).exec();
     return {
       success: true,
-      team: foundTeam
+      team: foundTeam,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error loading team"
+      message: "Error loading team",
     };
   }
-}
+};
 
-module.exports.createTeam = async function(name, members, leagueId, userId) {
+module.exports.createTeam = async function createTeam(name, members, leagueId, userId) {
   try {
     const newTeam = new Team({
-      name: name,
-      members: members,
+      name,
+      members,
       league: leagueId,
-      created_by: userId
+      created_by: userId,
     });
-    let createdTeam = await newTeam.save();
+    const createdTeam = await newTeam.save();
     return {
       success: true,
-      team: createdTeam
+      team: createdTeam,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error creating team"
+      message: "Error creating team",
     };
   }
-}
+};
 
-module.exports.loadLeagueTeams = async function(leagueId) {
+module.exports.loadLeagueTeams = async function loadLeagueTeams(leagueId) {
   try {
-    let foundTeams = await Team.find({ league: leagueId}).exec();
+    const foundTeams = await Team.find({ league: leagueId }).exec();
     return {
       success: true,
-      teams: foundTeams
+      teams: foundTeams,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error loading league teams"
+      message: "Error loading league teams",
     };
   }
-}
+};

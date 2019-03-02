@@ -1,20 +1,21 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 // create schema
 const GameDefinitionSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   default_team_size: {
     type: Number,
-    required: true
+    required: true,
   },
   default_win_loss_only: {
     type: Boolean,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = GameDefinition = mongoose.model("game_definitions", GameDefinitionSchema);

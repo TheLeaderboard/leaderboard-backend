@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const router = express.Router();
 
 // load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -9,7 +10,6 @@ const validateLoginInput = require("../../validation/login");
 
 // load user model
 const User = require("../../models/user");
-
 const teams = require("../../modules/teams");
 
 // @route POST api/users/register
@@ -23,9 +23,9 @@ router.post("/register", async (req, res) => {
     return res.status(400).json(errors);
   }
   // check for existing user
-  User.findOne({ email: req.body.email }).then(user => {
+  User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
-      return res.status(400).json({ email: "Email already exists"});
+      return res.status(400).json({ email: "Email already exists" });
     } else {
       const newUser = new User({
         name: req.body.name,
@@ -46,21 +46,21 @@ router.post("/register", async (req, res) => {
               // create JWT payload
               const payload = {
                 id: user.id,
-                username: user.username
+                username: user.username,
               };
               // sign token
               jwt.sign(
                 payload,
                 process.env.SECRET_OR_KEY,
                 {
-                  expiresIn: 31556926 // 1 year in seconds
+                  expiresIn: 31556926, // 1 year in seconds
                 },
                 (err, token) => {
                   res.json({
                     success: true,
-                    token: "Bearer " + token
+                    token: `Bearer ${token}`,
                   });
-                }
+                },
               );
             })
             .catch(err => console.log(err));
@@ -80,41 +80,40 @@ router.post("/login", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body;
 
   // find user by email
-  User.findOne({ email }).then(user => {
+  User.findOne({ email }).then((user) => {
     if (!user) {
-      return res.status(400).json({ emailnotfound: "Email not found"});
+      return res.status(400).json({ emailnotfound: "Email not found" });
     } else {
       // check password
-      bcrypt.compare(password, user.password).then(isMatch => {
+      bcrypt.compare(password, user.password).then((isMatch) => {
         if (isMatch) {
           // user matched
           // create JWT payload
           const payload = {
             id: user.id,
-            username: user.username
+            username: user.username,
           };
           // sign token
           jwt.sign(
             payload,
             process.env.SECRET_OR_KEY,
             {
-              expiresIn: 31556926 // 1 year in seconds
+              expiresIn: 31556926, // 1 year in seconds
             },
             (err, token) => {
               res.json({
                 success: true,
-                token: "Bearer " + token
+                token: `Bearer ${token}`,
               });
-            }
+            },
           );
         } else {
-          return res.status(400).json({ passwordIncorrect: "Password incorect"});
+          return res.status(400).json({ passwordIncorrect: "Password incorect" });
         }
-      })
+      });
     }
   });
 });

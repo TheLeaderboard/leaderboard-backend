@@ -1,18 +1,18 @@
 // load user model
 const User = require("../models/user");
 
-module.exports.loadUser = async function(userId) {
+module.exports.loadUser = async function loadUser(userId) {
   try {
-    let foundUser = await User.findById(userId).exec();
+    const foundUser = await User.findById(userId).exec();
     return {
       success: true,
-      user: foundUser
+      user: foundUser,
     };
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return {
       success: false,
-      message: "Error loading user"
+      message: "Error loading user",
     };
   }
-}
+};
