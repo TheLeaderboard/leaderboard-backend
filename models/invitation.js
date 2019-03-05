@@ -30,6 +30,7 @@ const InvitationSchema = new Schema({
     required: true,
     index: true,
     lowercase: true,
+    trim: true,
   },
 });
 
