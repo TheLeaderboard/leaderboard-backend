@@ -29,6 +29,7 @@ const InvitationSchema = new Schema({
     type: String,
     required: true,
     index: true,
+    lowercase: true,
   },
 });
 
