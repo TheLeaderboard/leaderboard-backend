@@ -23,50 +23,49 @@ router.post("/register", async (req, res) => {
     return res.status(400).json(errors);
   }
   // check for existing user
-  User.findOne({ email: req.body.email }).then((user) => {
+  User.findOne({ email: req.body.email.toLowerCase() }).then((user) => {
     if (user) {
       return res.status(400).json({ email: "Email already exists" });
-    } else {
-      const newUser = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        username: req.body.username
-      });
-      // has password before saving to database
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(async user => {
-              // create default team
-              await teams.createUserTeam(user._id);
-              // create JWT payload
-              const payload = {
-                id: user.id,
-                username: user.username,
-              };
-              // sign token
-              jwt.sign(
-                payload,
-                process.env.SECRET_OR_KEY,
-                {
-                  expiresIn: 31556926, // 1 year in seconds
-                },
-                (err, token) => {
-                  res.json({
-                    success: true,
-                    token: `Bearer ${token}`,
-                  });
-                },
-              );
-            })
-            .catch(err => console.log(err));
-        });
-      });
     }
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      username: req.body.username,
+    });
+    // hash password before saving to database
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err;
+        newUser.password = hash;
+        newUser
+          .save()
+          .then(async (user) => {
+            // create default team
+            await teams.createUserTeam(user._id);
+            // create JWT payload
+            const payload = {
+              id: user.id,
+              username: user.username,
+            };
+            // sign token
+            jwt.sign(
+              payload,
+              process.env.SECRET_OR_KEY,
+              {
+                expiresIn: 31556926, // 1 year in seconds
+              },
+              (err, token) => {
+                res.json({
+                  success: true,
+                  token: `Bearer ${token}`,
+                });
+              },
+            );
+          })
+          .catch(err => console.log(err));
+      });
+    });
   });
 });
 
@@ -83,38 +82,37 @@ router.post("/login", (req, res) => {
   const { email, password } = req.body;
 
   // find user by email
-  User.findOne({ email }).then((user) => {
+  User.findOne({ email: email.toLowerCase() }).then((user) => {
     if (!user) {
       return res.status(400).json({ emailnotfound: "Email not found" });
-    } else {
-      // check password
-      bcrypt.compare(password, user.password).then((isMatch) => {
-        if (isMatch) {
-          // user matched
-          // create JWT payload
-          const payload = {
-            id: user.id,
-            username: user.username,
-          };
-          // sign token
-          jwt.sign(
-            payload,
-            process.env.SECRET_OR_KEY,
-            {
-              expiresIn: 31556926, // 1 year in seconds
-            },
-            (err, token) => {
-              res.json({
-                success: true,
-                token: `Bearer ${token}`,
-              });
-            },
-          );
-        } else {
-          return res.status(400).json({ passwordIncorrect: "Password incorect" });
-        }
-      });
     }
+    // check password
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        // user matched
+        // create JWT payload
+        const payload = {
+          id: user.id,
+          username: user.username,
+        };
+        // sign token
+        jwt.sign(
+          payload,
+          process.env.SECRET_OR_KEY,
+          {
+            expiresIn: 31556926, // 1 year in seconds
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: `Bearer ${token}`,
+            });
+          },
+        );
+      } else {
+        return res.status(400).json({ passwordIncorrect: "Password incorect" });
+      }
+    });
   });
 });
 
