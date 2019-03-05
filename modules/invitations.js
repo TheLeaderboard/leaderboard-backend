@@ -33,7 +33,7 @@ module.exports.createInvitations = async function createInvitations(type, groupI
  */
 module.exports.loadInvitationsForUser = async function loadInvitationsForUser(email) {
   try {
-    const foundInvitations = await Invitation.find({ invited_email: email, invite_status: "Created" })
+    const foundInvitations = await Invitation.find({ invited_email: email.toLowerCase().trim(), invite_status: "Created" })
       .populate("league_id", "name")
       .populate("inviting_user", "username")
       .exec();
