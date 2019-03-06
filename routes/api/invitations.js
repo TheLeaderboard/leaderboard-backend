@@ -32,8 +32,6 @@ router.post("/create", async (req, res) => {
 router.get("/user", async (req, res) => {
   const userId = req.decoded.id;
   const userData = await users.loadUser(userId);
-  console.log("Load user invites");
-  console.log(userData.user.email);
   const foundInvitations = await invitations.loadInvitationsForUser(userData.user.email);
   if (foundInvitations.success) {
     res.json({
