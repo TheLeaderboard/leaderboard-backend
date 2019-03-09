@@ -16,5 +16,6 @@ module.exports = {
     "quotes": ["warn", "double"],
     "no-console": "off",
     "consistent-return": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_id"]}],
   },
 };
