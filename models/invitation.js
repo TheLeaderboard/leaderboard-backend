@@ -34,4 +34,6 @@ const InvitationSchema = new Schema({
   },
 });
 
-module.exports = Invitation = mongoose.model("invitations", InvitationSchema);
+const Invitation = mongoose.model("invitations", InvitationSchema);
+
+module.exports = Invitation;

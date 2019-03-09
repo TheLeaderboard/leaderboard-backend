@@ -18,4 +18,6 @@ const GameDefinitionSchema = new Schema({
   },
 });
 
-module.exports = GameDefinition = mongoose.model("game_definitions", GameDefinitionSchema);
+const GameDefinition = mongoose.model("game_definitions", GameDefinitionSchema);
+
+module.exports = GameDefinition;

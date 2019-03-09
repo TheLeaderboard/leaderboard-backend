@@ -18,23 +18,23 @@ module.exports.createGame = async function createGame(gameData, userId) {
     });
     if (gameData.win_loss_only) {
       newGame.winner = gameData.selected_winner;
-      newGame.loser = gameData.home_team === gameData.selectedWinner ? gameData.away_team : gameData.home_team;
-    } else {
+      newGame.loser = gameData.home_team === gameData.selectedWinner
+        ? gameData.away_team : gameData.home_team;
+    } else if (Number(gameData.home_score) >= Number(gameData.away_score)) {
       // calculate winner based on scores
-      if (Number(gameData.home_score) >= Number(gameData.away_score)) {
-        // home team won
-        newGame.winner = gameData.home_team;
-        newGame.loser = gameData.away_team;
-        newGame.winner_score = Number(gameData.home_score);
-        newGame.loser_score = Number(gameData.away_score);
-      } else {
-        newGame.winner = gameData.away_team;
-        newGame.loser = gameData.home_team;
-        newGame.winner_score = Number(gameData.away_score);
-        newGame.loser_score = Number(gameData.home_score);
-      }
+      // home team won
+      newGame.winner = gameData.home_team;
+      newGame.loser = gameData.away_team;
+      newGame.winner_score = Number(gameData.home_score);
+      newGame.loser_score = Number(gameData.away_score);
+    } else {
+      // away team won
+      newGame.winner = gameData.away_team;
+      newGame.loser = gameData.home_team;
+      newGame.winner_score = Number(gameData.away_score);
+      newGame.loser_score = Number(gameData.home_score);
     }
-    if (gameData.team_size == 1) {
+    if (Number(gameData.team_size) === 1) {
       // load teams
       newGame.home_user = newGame.home_team;
       newGame.away_user = newGame.away_team;
@@ -43,7 +43,7 @@ module.exports.createGame = async function createGame(gameData, userId) {
       const userHome = userHomeResult.team;
       const userAway = userAwayResult.team;
       newGame.teams = [userHome._id, userAway._id];
-      if (gameData.home_team == gameData.selected_winner) {
+      if (gameData.home_team === gameData.selected_winner) {
         newGame.winner = userHome._id;
         newGame.loser = userAway._id;
       } else {
